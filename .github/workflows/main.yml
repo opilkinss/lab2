@@ -3,9 +3,10 @@ name: CI
 on:
   push:
     branches: [ main, development, release ]
+    tags:
+      - 'v*'               # запуск для всех тегов, начинающихся на v
   pull_request:
     branches: [ main ]
-
 jobs:
   test:
     runs-on: ubuntu-latest
