@@ -36,8 +36,9 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - name: Create Release
-        uses: softprops/action-gh-release@v1
+        uses: softprops/action-gh-release@v2   # v2 вместо v1
         with:
+          token: ${{ secrets.GITHUB_TOKEN }}    # явно передаём токен
           name: Release ${{ github.ref_name }}
           body: |
             Изменения в этом релизе:
