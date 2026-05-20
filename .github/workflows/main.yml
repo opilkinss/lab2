@@ -28,3 +28,19 @@ jobs:
 
       - name: Run unit tests
         run: pytest tests/ --verbose
+    release:
+    needs: test
+    runs-on: ubuntu-latest
+    if: startsWith(github.ref, 'refs/tags/')
+    steps:
+      - uses: actions/checkout@v4
+      - name: Create Release
+        uses: softprops/action-gh-release@v1
+        with:
+          name: Release ${{ github.ref_name }}
+          body: |
+            Изменения в этом релизе:
+            - Добавлена функция умножения
+            - Обновлена версия до 1.0.0
+          draft: false
+          prerelease: false
