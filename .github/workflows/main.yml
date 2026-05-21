@@ -3,9 +3,10 @@ name: CI
 on:
   push:
     branches: [ main, development, release ]
+    tags:
+      - 'v*'               # запуск для всех тегов, начинающихся на v
   pull_request:
     branches: [ main ]
-
 jobs:
   test:
     runs-on: ubuntu-latest
@@ -28,3 +29,20 @@ jobs:
 
       - name: Run unit tests
         run: pytest tests/ --verbose
+  release:
+    needs: test
+    runs-on: ubuntu-latest
+    if: startsWith(github.ref, 'refs/tags/')
+    steps:
+      - uses: actions/checkout@v4
+      - name: Create Release
+        uses: softprops/action-gh-release@v2   # v2 вместо v1
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}    # явно передаём токен
+          name: Release ${{ github.ref_name }}
+          body: |
+            Изменения в этом релизе:
+            - Добавлена функция умножения
+            - Обновлена версия до 1.0.0
+          draft: false
+          prerelease: false
